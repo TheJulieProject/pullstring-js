@@ -9,7 +9,8 @@
     "test-dev": "nyc ava --verbose --timeout=20s tests/test-text-dev.js",
     "dev": "webpack --progress --colors --watch --mode=dev",
     "dev-and-test": "npm run dev & npm run test-dev -- --watch",
-    "build": "webpack --mode=build; npm run test;"
+    "build": "webpack --mode=build; npm run test;",
+    "build-only": "webpack --mode=build"
   },
   "nyc": {
     "include":[
