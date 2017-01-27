@@ -10,7 +10,7 @@ write in the PullString Author environment and publish to the PullString Platfor
 ## Library
 
 The JavaScript SDK is written in ES6 and uses [Babel](http://babeljs.io/) and [Webpack](https://webpack.github.io/) to
-generate a library for the browser. While the SDK itself has no dependencies, [Node JS](https://nodejs.org/en/) is required to build the SDK and run the unit tests. After ensuring [Node JS](https://nodejs.org/en/) is installed, run the following command to install the necessary build dependencies.
+generate a library for the browser. While the SDK itself has no dependencies, [Node JS](https://nodejs.org/en/) is required to build the SDK and run the unit tests. After ensuring [Node JS](https://nodejs.org/en/) is installed, run the following command to install the necessary build dependencies. Windows users should use Powershell or a bash terminal instead of the Command Prompt.
 
 ```
 npm run init
@@ -28,6 +28,13 @@ the tests on their own.
 ```
 npm run test
 ```
+
+#### Note to Windows Users
+There are reports of the unit test framework, [Ava](https://github.com/avajs/ava), not running correctly on Windows.  If you run into this issue but still want to build, you can skip the unit test.
+```
+npm run build-only
+```
+
 ## Quickstart
 
 Below is a barebones example of starting a conversation with the PullString Web API.  It will print the inital content under
