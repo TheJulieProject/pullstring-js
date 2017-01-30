@@ -61,11 +61,11 @@ class Speech {
             headers,
             audioData,
             (response) => callback(response),
-            doEncode
+            false
         );
     }
 
-    static getWavData(data) {
+    getWavData(data) {
         let riff = data.toString('ascii', 0, 4);
 
         if (riff !== 'RIFF') {
