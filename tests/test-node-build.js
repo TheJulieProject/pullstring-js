@@ -1,22 +1,19 @@
-require('babel-core/register');
 import test from 'ava';
-const XMLHttpRequest = require('xhr2').XMLHttpRequest;
-const Conversation = require('../src/Conversation.js').Conversation;
-const Request = require('../src/Request.js').Request;
+
+const PS = require('../dist/node');
 const TestBase = require('./TestBase.js').TestBase;
-const VersionInfo = require('../src/VersionInfo.js').VersionInfo;
 
 const API_KEY = '36890c35-8ecd-4ac4-9538-6c75eb1ea6f6';
 const PROJECT = '841cbd2c-e1bf-406b-9efe-a9025399aab4';
 const BUILD_TYPE = 'production';
 
-var conversation = new Conversation(XMLHttpRequest);
-var request = new Request({
+let conversation = new PS.Conversation();
+let request = new PS.Request({
     apiKey: API_KEY,
     buildType: BUILD_TYPE,
 });
 
-var testBase = new TestBase(conversation, request, PROJECT, VersionInfo);
+let testBase = new TestBase(conversation, request, PROJECT, PS.VersionInfo);
 
 test.cb.serial('feature info', t => {
     testBase.versionInfo(t);

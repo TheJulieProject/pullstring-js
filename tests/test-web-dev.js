@@ -1,40 +1,25 @@
 require('babel-core/register');
 import test from 'ava';
-const XMLHttpRequest = require('xhr2');
-const jsdom = require('jsdom');
+const XMLHttpRequest = require('xhr2').XMLHttpRequest;
+const Conversation = require('../src/Conversation.js').Conversation;
+const Request = require('../src/Request.js').Request;
 const TestBase = require('./TestBase.js').TestBase;
+const VersionInfo = require('../src/VersionInfo.js').VersionInfo;
 
 const API_KEY = '36890c35-8ecd-4ac4-9538-6c75eb1ea6f6';
 const PROJECT = '841cbd2c-e1bf-406b-9efe-a9025399aab4';
 const BUILD_TYPE = 'production';
 
-jsdom.defaultDocumentFeatures = {
-    FetchExternalResources: ["script"],
-    ProcessExternalResources: ["script"],
-};
-
-// to test the transpiled build, first mock a browser environment
-test.cb.before(t => {
-    let htmlDoc = '<html><body></body></html>';
-    jsdom.env(
-        htmlDoc,
-        ['../dist/pullstring.min.js'],
-        function(err, window) {
-            global.pullstring = window.pullstring;
-            global.conversation = new pullstring.Conversation(XMLHttpRequest);
-            global.request = new pullstring.Request({
-                apiKey: API_KEY,
-                buildType: BUILD_TYPE,
-            });
-
-            global.testBase = new TestBase(conversation, request, PROJECT, pullstring.VersionInfo);
-            t.end();
-        }
-    );
+var conversation = new Conversation(XMLHttpRequest);
+var request = new Request({
+    apiKey: API_KEY,
+    buildType: BUILD_TYPE,
 });
 
+var testBase = new TestBase(conversation, request, PROJECT, VersionInfo);
+
 test.cb.serial('feature info', t => {
-    testBase.versionInfo(t);
+    testBase.versionInfo(t, true);
 });
 
 test.cb.serial('bad request', t => {
@@ -46,15 +31,15 @@ test.cb.serial('bad project', t => {
 });
 
 test.cb.serial('bad audio', t => {
-    testBase.badAudio(t);
+    testBase.badAudio(t, true);
 });
 
 test.cb.serial('introduction', t => {
     testBase.introduction(t);
 });
 
-test.cb.serial('intro with asr', t=> {
-    testBase.introAsr(t);
+test.cb.serial('intro with asr', t => {
+    testBase.introAsr(t, true);
 });
 
 test.cb.serial('go to response', t => {

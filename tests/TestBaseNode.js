@@ -10,16 +10,13 @@ class TestBase {
         this.version = version;
     }
 
-    versionInfo(t, isWeb) {
-        let baseUrl = 'conversation.pullstring.ai/v1/';
-        if (isWeb) baseUrl = 'https://' + baseUrl;
-        if (this.version.ApiBaseUrl !== baseUrl) {
+    versionInfo(t) {
+        if (this.version.ApiBaseUrl !== 'conversation.pullstring.ai/v1/') {
             this.fail(t, 'Base Url is not correct');
         }
 
-        let enabled = !!isWeb
-        if (this.version.hasFeature(this.version.EFeatures.StreamingAsr) === enabled) {
-            this.fail(t, 'Streaming Asr should not be enabled');
+        if (!this.version.hasFeature(this.version.EFeatures.StreamingAsr)) {
+            this.fail(t, 'Streaming Asr should be enabled');
         }
 
         this.pass(t);
@@ -63,15 +60,9 @@ class TestBase {
         this.conversation.start(crap, this.request);
     }
 
-    badAudio(t, isWeb) {
+    badAudio(t) {
         let step = 0;
-        let audio = null;
-        if (isWeb) {
-            let ab1 = this.stringToArrayBuffer('RUFF ');
-            audio = new DataView(ab1);
-        } else {
-            audio = Buffer.from('RUFF ');
-        }
+        let audio = Buffer.from('RUFF ');
 
         this.start(response => {
             switch (step++) {
@@ -86,8 +77,7 @@ class TestBase {
                 this.errorShouldMatch('Data is not a WAV file', response, t);
                 break;
             case 3:
-                let dataType = !!isWeb ? 'DataView' : 'Buffer';
-                this.errorShouldMatch('Audio sent to sendAudio is not a ' + dataType, response, t, true);
+                this.errorShouldMatch('Audio sent to sendAudio is not a Buffer', response, t, true);
                 this.conversation.sendAudio(audio, 0);
                 break;
             default: (this.fail(t));
@@ -101,7 +91,7 @@ class TestBase {
             switch (step++) {
             case 0:
                 if (!this.conversation.getConversationId()) {
-                    this.fail('Conversation ID not found');
+                    this.fail(t, 'Conversation ID not found');
                 }
                 this.textShouldMatch("Hello. What's your name?", response, t, true);
                 this.conversation.sendText('janet');
@@ -120,7 +110,7 @@ class TestBase {
         });
     }
 
-    introAsr(t, isWeb) {
+    introAsr(t) {
         let step = 0;
         this.start(response => {
             switch (step++) {
@@ -134,21 +124,9 @@ class TestBase {
                     return;
                 }
 
-                let audio = null;
+                let data = Buffer.from(file);
 
-                if (isWeb) {
-                    let ab = new ArrayBuffer(file.length);
-                    let data = new Uint8Array(ab);
-                    for (let i = 0; i < file.length; i++) {
-                        data[i] = file[i];
-                    }
-
-                    audio = new DataView(ab);
-                } else {
-                    audio = Buffer.from(file);
-                }
-
-                this.conversation.sendAudio(audio, 1);
+                this.conversation.sendAudio(data, 1);
                 break;
             case 1:
                 this.textShouldMatch('Hello Grant', response, t);
@@ -485,16 +463,6 @@ class TestBase {
         t.pass();
         t.end();
     }
-
-    stringToArrayBuffer(str) {
-        let ab = new ArrayBuffer(str.length * 2);
-        let arr = new Uint16Array(ab);
-        for (let i = 0; i < str.length; i++) {
-            arr[i] = str.charCodeAt(i);
-        }
-        return ab;
-    }
-
 }
 
 module.exports = { TestBase };
