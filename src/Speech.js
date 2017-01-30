@@ -16,7 +16,7 @@ class Speech {
         this._worker = null;
     }
 
-    start(endpoint, headers, params, callback) {
+    start(endpoint, params, headers, callback) {
         this._endpoint = endpoint;
         this._headers = headers;
         this._params = params;
