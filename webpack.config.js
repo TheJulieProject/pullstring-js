@@ -18,7 +18,7 @@ var config = {
     entry: './src/Pullstring.js',
     devtool: 'source-map',
     output: {
-        path: './dist',
+        path: './dist/web',
         filename: outfile,
         library: libraryName,
         libratyTarget: 'umd',
