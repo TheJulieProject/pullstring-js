@@ -1,0 +1,121 @@
+<html>
+<head>
+    <title>PullString SDK Speech Example</title>
+    <link type="text/css" rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="wrapper">
+    <div id="chatbox"></div>
+    <form name="speech" action="">
+        <input name="recordinput" type="submit" id="recordinput" value="Record">
+        <p>(hold to record)</p>
+    </form>
+</div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript" src='/js/SpeechListener.js'></script>
+<script type="text/javascript">
+
+var listener = new SpeechListener('/add_audio', $.ajax);
+var audioElement;
+var timeout;
+
+var onResponse = function(response) {
+    if (!response) { return };
+    // print the recognized speech if the request was speech
+    if (response.asrHypothesis) {
+        var msg = response.asrHypothesis;
+        $("#chatbox").append("<strong>You:<\/strong> " + msg + "<br/>");
+        autoScroll(oldHeight);
+    }
+
+    for (var output of response.outputs) {
+        // print response text to the chatbox
+        if (output.text) {
+            var oldHeight = getScrollHeight();
+            $("#chatbox").append("<strong>" + output.character + ":<\/strong> " + output.text + "<br/>");
+            autoScroll(oldHeight);
+        }
+
+        // if the response has audio, play it as well
+        if (output.uri) {
+            audioElement.setAttribute('src', output.uri);
+            audioElement.load();
+            audioElement.play();
+        }
+    }
+
+    // start timer, if timed response interval was set
+    if (response.timedResponseInterval > 0) {
+        var delayTime = response.timedResponseInterval * 1000;
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(timeoutElapsed, delayTime);
+    }
+};
+
+$(document).ready(function() {
+    // audio tag for playing files found in responses
+    audioElement = document.createElement('audio');
+
+    // prepare the mic and then start the conversation
+    listener.init(function(success) {
+        if (!success) {
+            throw new Error("This browser does not appear to support audio recording.");
+        }
+
+        sendRequest('/start');
+    });
+});
+
+// hold to record
+$("#recordinput").mousedown(function() {
+    sendRequest('/start_audio');
+    listener.startAudio();
+})
+
+// release to stop recording
+$("#recordinput").mouseup(function() {
+    listener.stopAudio();
+    sendRequest('/end_audio');
+});
+
+// ignore form submission
+$("#recordinput").click(function() {
+    return false;
+});
+
+var autoScroll = function(oldHeight) {
+    var newHeight = getScrollHeight();
+    if (newHeight > oldHeight) {
+        $("#chatbox").animate({ scrollTop: newHeight }, 'normal');
+    }
+};
+
+var getScrollHeight = function() {
+    return $("#chatbox")[0].scrollHeight - 20;
+};
+
+var timeoutElapsed = function() {
+    sendRequest('/continue')
+};
+
+var sendRequest = function(endpoint, body) {
+    var options = {
+        type: 'POST',
+        url: endpoint,
+        contentType: 'text/plain',
+        success: onResponse
+    }
+
+    if (body) {
+        options.data = body;
+    }
+
+    $.ajax(options);
+};
+
+</script>
+</body>
+</html>
