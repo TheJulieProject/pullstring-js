@@ -4,7 +4,7 @@
   "description": "An SDK for interfacing with PullString's conversational AI engine.",
   "main": "dist/pullstring.min.js",
   "scripts": {
-    "init": "mkdir dist & mkdir docs & npm install",
+    "init": "mkdir dist; npm install;",
     "test": "npm run test-web; npm run test-node;",
     "test-web": "ava --verbose --timeout=20s tests/test-web-build.js",
     "test-node": "ava --verbose --timeout=20s tests/test-node-build.js",
