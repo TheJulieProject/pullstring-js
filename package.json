@@ -8,7 +8,7 @@
     "test": "npm run test-web; npm run test-node;",
     "test-web": "ava --verbose --timeout=20s tests/test-web-build.js",
     "test-node": "ava --verbose --timeout=20s tests/test-node-build.js",
-    "dev": "webpack --progress --colors --watch --mode=dev",
+    "dev-web": "webpack --progress --colors --watch --mode=dev",
     "build-node": "mkdir temp; cp src/*.js temp/; cp src/node-classes/*.js temp/; mv temp/Pullstring.js temp/index.js; rm temp/SpeechWorker.js; babel temp --out-dir dist/node; rm -rf temp",
     "build-web": "webpack --mode=build",
     "build-only": "npm run build-node; npm run build-web",
