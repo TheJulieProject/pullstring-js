@@ -353,6 +353,12 @@ class TestBase {
             tests.push(expected);
         }
 
+        if (tests.length != response.outputs.length) {
+            t.fail(`Expected ${tests.length} outputs, found ${response.outputs.length}`);
+            t.end();
+            return;
+        }
+
         for (let i in tests) {
             if (response.outputs[i].text !== tests[i]) {
                 t.fail(`Text does not match. expected '${tests[i]}', found '${response.outputs[i].text}'`);
