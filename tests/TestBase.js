@@ -353,7 +353,7 @@ class TestBase {
             tests.push(expected);
         }
 
-        if (tests.length != response.outputs.length) {
+        if (tests.length > response.outputs.length) {
             t.fail(`Expected ${tests.length} outputs, found ${response.outputs.length}`);
             t.end();
             return;
