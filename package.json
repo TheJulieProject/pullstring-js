@@ -4,15 +4,17 @@
   "description": "An SDK for interfacing with PullString's conversational AI engine.",
   "main": "dist/pullstring.min.js",
   "scripts": {
-    "init": "mkdir dist; npm install;",
-    "test": "npm run test-web; npm run test-node;",
+    "init": "mkdir dist & npm install",
+    "test": "npm run test-node && npm run test-web",
     "test-web": "ava --verbose --timeout=20s tests/test-web-build.js",
     "test-node": "ava --verbose --timeout=20s tests/test-node-build.js",
     "dev-web": "webpack --progress --colors --watch --mode=dev",
     "build-node": "mkdir temp; cp src/*.js temp/; cp src/node-classes/*.js temp/; mv temp/Pullstring.js temp/index.js; rm temp/SpeechWorker.js; babel temp --out-dir dist/node; rm -rf temp",
     "build-web": "webpack --mode=build",
     "build-only": "npm run build-node; npm run build-web",
-    "build": "npm run build-only; npm run test;"
+    "build": "npm run build-only; npm run test;",
+    "build-node-win": "mkdir temp && copy .\\src\\*.js .\\temp\\ && copy .\\src\\node-classes\\*.js .\\temp && move .\\temp\\Pullstring.js .\\temp\\index.js && del .\\temp\\SpeechWorker.js && babel .\\temp --out-dir .\\dist\\node && rd /s /q .\\temp",
+    "build-win" : "npm run build-node-win && npm run build-web"
   },
   "nyc": {
     "include": [
