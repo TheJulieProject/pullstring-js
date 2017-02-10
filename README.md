@@ -59,7 +59,7 @@ node server.js
 
 ## Building the Libraries
 
-The JavaScript SDK can be built for the browser and [Node JS](https://nodejs.org/en/). When building for the browser, Node is still required to build the SDK and run the unit tests. The SDK is written in ES6 and uses [Babel](http://babeljs.io/) and [Webpack](https://webpack.github.io/) to generate a minified browser library. After ensuring [Node JS](https://nodejs.org/en/) is installed, run the following command to install the necessary build dependencies. Windows users should use Powershell or a bash terminal instead of the Command Prompt.
+The JavaScript SDK can be built for the browser and [Node JS](https://nodejs.org/en/). When building for the browser, Node is still required to build the SDK and run the unit tests. The SDK is written in ES6 and uses [Babel](http://babeljs.io/) and [Webpack](https://webpack.github.io/) to generate a minified browser library. After ensuring [Node JS](https://nodejs.org/en/) is installed, run the following command to install the necessary build dependencies.
 
 ```
 npm run init
@@ -67,15 +67,17 @@ npm run init
 
 Next, run the following command to build the library and run unit tests.
 
-```
-npm run build
+```js
+npm run build       // macOS, Linux, etc
+npm run build-win   // Windows
 ```
 
-It it possible to build for idividual platforms.
+It it possible to build for individual platforms.
 
 ```js
-npm run build-web
-npm run build-node
+npm run build-web       // all OS's
+npm run build-node      // macOs, Linux, etc
+npm tun build-node-win  // Windows
 ```
 
 The build output can be found at `dist/web` and `dist/node`. You can also run
@@ -88,10 +90,7 @@ npm run test-node
 ```
 
 #### Note to Windows Users
-There are reports of the unit test framework, [Ava](https://github.com/avajs/ava), not running correctly on Windows.  If you run into this issue but still want to build, you can skip the unit test.
-```
-npm run build-only
-```
+There are reports of the unit test framework, [Ava](https://github.com/avajs/ava), not running correctly on Windows. Because of this, `npm run build-win` does not run tests as a part of the build process.
 
 ## Documentation
 
