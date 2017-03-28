@@ -359,8 +359,22 @@ class Conversation {
             asr_language: request.language, // eslint-disable-line camelcase
         };
 
-        if (request.locale) params.locale = request.locale;
-        if (request.acountId) params.account = request.accountId;
+        if (request.locale) {
+            params.locale = request.locale;
+        }
+
+        if (request.acountId) {
+            params.account = request.accountId;
+        }
+
+        // only add restart_if_modified and if_modified if not the default values
+        if (request.restartIfModified === false) {
+            params.restart_if_modified = false; // eslint-disable-line camelcase
+        }
+
+        if (request.ifModifiedAction !== Request.EIfModifiedAction.Nothing) {
+            params.if_modified = request.ifModifiedAction; // eslint-disable-line camelcase
+        }
 
         return params;
     }
@@ -368,13 +382,9 @@ class Conversation {
     _bodyForRequest(request, params = null) {
         let body = {};
 
-        // only add build_type and restart_if_modified if not the default values
+        // only add build_type if not the default values
         if (request.buildType !== Request.EBuildType.Production) {
             body.build_type = request.buildType; // eslint-disable-line camelcase
-        }
-
-        if (request.restartIfModified === false) {
-            body.restart_if_modified = false; // eslint-disable-line camelcase
         }
 
         if (request.participantId) body.participant = request.participantId;

@@ -8,7 +8,7 @@
  */
 
 /**
- * The asset build tyoe to request for Web API requests
+ * The asset build type to request for Web API requests
  * @readonly
  * @enum {string}
  * @property {string} EBuildType.Sandbox
@@ -19,6 +19,20 @@ const EBuildType = {
     Sandbox: 'sandbox',
     Staging: 'staging',
     Production: 'production',
+};
+
+/**
+ * The Action to take for a conversation when new content is published
+ * @readonly
+ * @enum {string}
+ * @property {string} EIfModifiedAction.Restart
+ * @property {string} EIfModifiedAction.Update
+ * @property {string} EIfModifiedAction.Nothing
+ */
+const EIfModifiedAction = {
+    Restart: 'restart',
+    Update: 'update',
+    Nothing: 'nothing',
 };
 
 /**
@@ -43,11 +57,15 @@ const EAudioFormat = {
  * is started.
  * @property {string} language ASR language; defaults to 'en-US'.
  * @property {string} locale User locale; defaults to'en-US'.
- * @property {boolean} restartIfModified Restart this conversation if a newer
- * version of the project has been published. Default value is true.
+ * @property {EIfModifiedAction} ifModifiedAction Describes what should happen for an
+ * existing conversatino when a newer version of the project is published: restart, update
+ * content while preserving state, or continue with current content.
  * @property {number} timeZoneOffset A value in seconds representing the offset
  * in UTC. For example, PST would be -28800.
  * @property {string} accountId
+ * @property {boolean} restartIfModified Restart this conversation if a newer
+ * version of the project has been published. Default value is true. [deprecated, use
+ * ifModifiedAction]
  */
 class Request {
     constructor(config) {
@@ -60,9 +78,11 @@ class Request {
         this.accountId = config.accountId;
         this.timeZoneOffset = config.timeZoneOffset || 0;
         this.restartIfModified = config.restartIfModified || true;
+        this.ifModifiedAction = config.ifModifiedAction || EIfModifiedAction.Nothing;
     }
 }
 
+Request.EIfModifiedAction = EIfModifiedAction;
 Request.EBuildType = EBuildType;
 Request.EAudioFormat = EAudioFormat;
 

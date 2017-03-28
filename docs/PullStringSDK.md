@@ -32,6 +32,7 @@ Name|Description
 Name|Description
 ----|-----------
  [`EBuildType`](#EBuildType)|The asset build tyoe to request for Web API requests
+ [`EIfModifiedAction`](#EIfModifiedAction)|The Action to take for a conversation when new content is published
  [`EAudioFormat`](#EAudioFormat)|Describe audio formats used by the SDK
  [`EOutputType`](#EOutputType)|Define the set of outputs that can be returned in a response.
  [`EEntityType`](#EEntityType)|Define the list of entity types
@@ -318,9 +319,10 @@ Describe the parameters for a request to the PullString Web API.
 | conversationId | `string` | Identifies an ongoing conversation to the Web API and can persist across sessions. It is required after a conversation is started. |
 | language | `string` | ASR language; defaults to 'en-US'. |
 | locale | `string` | User locale; defaults to'en-US'. |
-| restartIfModified | `boolean` | Restart this conversation if a newer version of the project has been published. Default value is true. |
+| ifModifiedAction | [`EIfModifiedAction`](#EIfModifiedAction) | defaults to EIfModifiedAction.None |
 | timeZoneOffset | `number` | A value in seconds representing the offset in UTC. For example, PST would be -28800. |
 | accountId | `string` |  |
+| restartIfModified | `boolean` | Restart this conversation if a newer version of the project has been published. Default value is true. *[deprecated, use `ifModifiedAction` instead]*|
 
 <a name="Phoneme"></a>
 
@@ -509,6 +511,20 @@ The asset build tyoe to request for Web API requests
 | Sandbox | `string` | `"sandbox"` |
 | Staging | `string` | `"staging"` |
 | Production | `string` | `"production"` |
+
+<a name="EIfModifiedAction"></a>
+
+## EIfModifiedAction Enum
+
+The Action to take for a conversation when new content is published
+
+### Properties
+
+| Name | Type | Value |
+| --- | --- | --- |
+| Restart | `string` | `"restart"` |
+| Update | `string` | `"update"` |
+| Nothing | `string` | `"nothing"` |
 
 <a name="EAudioFormat"></a>
 
