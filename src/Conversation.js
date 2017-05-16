@@ -86,6 +86,39 @@ class Conversation {
     }
 
     /**
+     * Send an intent as user input to the Web API and receive a response via
+     * the onResponse callback.
+     * @param {string} intent The name of the intent representing user input.
+     * @param {Object[]} entities An array specifying any entities to set and
+     * their new values. [Optional]
+     * @param {string} entities[].name The entity's name.
+     * @param {*} entities[].value The entity's name, which can be any type.
+     * @param {Request} request A request object with at least apiKey and
+     * conversationId set.
+     */
+    sendIntent(intent, entities, request) {
+        if (!intent) {
+            this._returnError('intent name must be provided to sendIntent');
+            return;
+        }
+
+        let json = {
+            intent: intent,
+        };
+
+        if (Array.isArray(entities)) {
+            let entObj = {};
+            for (let i in entities) {
+                let entity = entities[i];
+                entObj[entity.name] = entity.value;
+            }
+            json.set_entities = entObj; // eslint-disable-line camelcase
+        }
+
+        this._post(json, request);
+    }
+
+    /**
      * Send an activity name or ID to the Web API and receive a response via
      * the onResponse callback.
      * @param {string} activity The activity name or ID.
