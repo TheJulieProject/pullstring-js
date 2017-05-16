@@ -158,6 +158,26 @@ class TestBase {
         });
     }
 
+    introIntent(t) {
+        let step = 0;
+        this.start(response => {
+            switch(step++) {
+            case 0:
+                this.textShouldMatch("Welcome to the LUIS test. What do you like?", response, t, true);
+                let colorLabel = {
+                    name: "Luis Color",
+                    value: "Green",
+                };
+                this.conversation.sendIntent('Favorite Color', [colorLabel])
+                break;
+            case 1:
+                this.textShouldMatch('Green is a cool color', response, t);
+                break;
+            default: t.fail();
+            }
+        });
+    }
+
     goToResponse(t) {
         let step = 0;
         this.start(response => {

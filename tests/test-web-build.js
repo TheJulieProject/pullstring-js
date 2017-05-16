@@ -6,6 +6,7 @@ const TestBase = require('./TestBase.js').TestBase;
 
 const API_KEY = '36890c35-8ecd-4ac4-9538-6c75eb1ea6f6';
 const PROJECT = '841cbd2c-e1bf-406b-9efe-a9025399aab4';
+const INTENT_PROJECT = '176a87fb-4d3c-fde5-4b3c-54f18c2d99a4';
 const BUILD_TYPE = 'production';
 
 jsdom.defaultDocumentFeatures = {
@@ -28,6 +29,7 @@ test.cb.before(t => {
             });
 
             global.testBase = new TestBase(conversation, request, PROJECT, pullstring.VersionInfo);
+            global.intentTest = new TestBase(conversation, request, INTENT_PROJECT, pullstring.VersionInfo);
             t.end();
         }
     );
@@ -55,6 +57,10 @@ test.cb.serial('introduction', t => {
 
 test.cb.serial('intro with asr', t=> {
     testBase.introAsr(t, true);
+});
+
+test.cb.serial('intro with intent', t => {
+    intentTest.introIntent(t);
 });
 
 test.cb.serial('go to response', t => {
