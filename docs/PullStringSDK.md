@@ -132,6 +132,7 @@ conversation.sendText("Hello, world");
     * [new Conversation([nodeXhr])](#new_Conversation_new)
     * [.start(projectName, request)](#Conversation+start)
     * [.sendText(text, [request])](#Conversation+sendText)
+    * [.sendIntent(intent, [entities, request])](#Conversation+sendIntent)
     * [.sendActivity(activity, [request])](#Conversation+sendActivity)
     * [.sendEvent(event, parameters, [request])](#Conversation+sendEvent)
     * [.startAudio([request])](#Conversation+startAudio)
@@ -178,6 +179,17 @@ onResponse callback.
 | text | `string` | User input text. | Yes |
 | [request] | [`Request`](#Request) | A request object with at least apiKey (`request.apiKey`) and conversationId (`request.conversationId`) set. | No |
 
+<a name="Conversation+sendIntent"></a>
+
+### conversation.sendIntent(intent, [entities, request])
+Send an intent as user input to the Web API and receive a response via the
+onResponse callback.
+
+| Param | Type | Description | Required
+| --- | --- | --- | --- |
+| intent | `string` | The name of the intent representing user input. | Yes |
+| entities | `Array.<Object>` | An array specifying the entities to set and their new values. Values are require for `entity.name` and `entity.value` for all objects in the array | Yes
+| [request] | [`Request`](#Request) | A request object with at least apiKey (`request.apiKey`) and conversationId (`request.conversationId`) set. | No |
 <a name="Conversation+sendActivity"></a>
 
 ### conversation.sendActivity(activity, [request])
